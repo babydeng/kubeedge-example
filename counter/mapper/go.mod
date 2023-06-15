@@ -1,13 +1,10 @@
-module github/babydeng/kubeedge-example/led-raspberrypi
+module github/babydeng/kubeedge-example/counter/mapper
 
 go 1.20
 
 require (
 	github.com/eclipse/paho.mqtt.golang v1.4.2
-	github.com/golang/glog v1.1.1
 	github.com/kubeedge/kubeedge v1.13.0
-	github.com/stianeikeland/go-rpio v4.2.0+incompatible
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -23,6 +20,7 @@ require (
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8s.io/api v0.23.15 // indirect
 	k8s.io/apimachinery v0.23.15 // indirect
 	k8s.io/klog/v2 v2.30.0 // indirect

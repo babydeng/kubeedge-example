@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"flag"
-
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	"github.com/golang/glog"
 	"github/babydeng/kubeedge-example/led-raspberrypi/configuration"
@@ -37,47 +36,47 @@ var deviceID string
 var pinNumber float64
 var configFile configuration.ReadConfigFile
 
-//Token interface to validate the MQTT connection.
+// Token interface to validate the MQTT connection.
 type Token interface {
 	Wait() bool
 	WaitTimeout(time.Duration) bool
 	Error() error
 }
 
-//DeviceStateUpdate is the structure used in updating the device state
+// DeviceStateUpdate is the structure used in updating the device state
 type DeviceStateUpdate struct {
 	State string `json:"state,omitempty"`
 }
 
-//BaseMessage the base struct of event message
+// BaseMessage the base struct of event message
 type BaseMessage struct {
 	EventID   string `json:"event_id"`
 	Timestamp int64  `json:"timestamp"`
 }
 
-//TwinValue the struct of twin value
+// TwinValue the struct of twin value
 type TwinValue struct {
 	Value    *string        `json:"value, omitempty"`
 	Metadata *ValueMetadata `json:"metadata,omitempty"`
 }
 
-//ValueMetadata the meta of value
+// ValueMetadata the meta of value
 type ValueMetadata struct {
 	Timestamp int64 `json:"timestamp, omitempty"`
 }
 
-//TypeMetadata the meta of value type
+// TypeMetadata the meta of value type
 type TypeMetadata struct {
 	Type string `json:"type,omitempty"`
 }
 
-//TwinVersion twin version
+// TwinVersion twin version
 type TwinVersion struct {
 	CloudVersion int64 `json:"cloud"`
 	EdgeVersion  int64 `json:"edge"`
 }
 
-//MsgTwin the struct of device twin
+// MsgTwin the struct of device twin
 type MsgTwin struct {
 	Expected        *TwinValue    `json:"expected,omitempty"`
 	Actual          *TwinValue    `json:"actual,omitempty"`
@@ -87,19 +86,19 @@ type MsgTwin struct {
 	ActualVersion   *TwinVersion  `json:"actual_version,omitempty"`
 }
 
-//DeviceTwinUpdate the struct of device twin update
+// DeviceTwinUpdate the struct of device twin update
 type DeviceTwinUpdate struct {
 	BaseMessage
 	Twin map[string]*MsgTwin `json:"twin"`
 }
 
-//usage is responsible for setting up the default settings of all defined command-line flags for glog.
+// usage is responsible for setting up the default settings of all defined command-line flags for glog.
 func usage() {
 	flag.PrintDefaults()
 	os.Exit(2)
 }
 
-//init for getting command line arguments for glog and initiating the MQTT connection
+// init for getting command line arguments for glog and initiating the MQTT connection
 func init() {
 	flag.Usage = usage
 	// NOTE: This next line is key you have to call flag.Parse() for the command line
@@ -162,7 +161,7 @@ func LoadConfigMap() error {
 	return nil
 }
 
-//changeDeviceState function is used to change the state of the device
+// changeDeviceState function is used to change the state of the device
 func changeDeviceState(state string) {
 	glog.Info("Changing the state of the device to online")
 	var deviceStateUpdateMessage DeviceStateUpdate
@@ -178,7 +177,7 @@ func changeDeviceState(state string) {
 	}
 }
 
-//changeTwinValue sends the updated twin value to the edge through the MQTT broker
+// changeTwinValue sends the updated twin value to the edge through the MQTT broker
 func changeTwinValue(updateMessage DeviceTwinUpdate) {
 	twinUpdateBody, err := json.Marshal(updateMessage)
 	if err != nil {
@@ -194,12 +193,13 @@ func changeTwinValue(updateMessage DeviceTwinUpdate) {
 // OnSubMessageReceived callback function which is called when message is received
 func OnSubMessageReceived(client MQTT.Client, message MQTT.Message) {
 	err := json.Unmarshal(message.Payload(), &deviceTwinResult)
+	glog.Info("get data: ", message.Payload())
 	if err != nil {
 		glog.Error("Error in unmarshalling:  ", err)
 	}
 }
 
-//createActualUpdateMessage function is used to create the device twin update message
+// createActualUpdateMessage function is used to create the device twin update message
 func createActualUpdateMessage(actualValue string) DeviceTwinUpdate {
 	var deviceTwinUpdateMessage DeviceTwinUpdate
 	actualMap := map[string]*MsgTwin{powerStatus: {Actual: &TwinValue{Value: &actualValue}, Metadata: &TypeMetadata{Type: "Updated"}}}
@@ -207,7 +207,7 @@ func createActualUpdateMessage(actualValue string) DeviceTwinUpdate {
 	return deviceTwinUpdateMessage
 }
 
-//getTwin function is used to get the device twin details from the edge
+// getTwin function is used to get the device twin details from the edge
 func getTwin(updateMessage DeviceTwinUpdate) {
 	getTwin := DeviceETPrefix + deviceID + TwinETGetSuffix
 	twinUpdateBody, err := json.Marshal(updateMessage)
@@ -220,7 +220,7 @@ func getTwin(updateMessage DeviceTwinUpdate) {
 	}
 }
 
-//subscribe function subscribes  the device twin information through the MQTT broker
+// subscribe function subscribes  the device twin information through the MQTT broker
 func subscribe() {
 	for {
 		getTwinResult := DeviceETPrefix + deviceID + TwinETGetResultSuffix
@@ -236,7 +236,7 @@ func subscribe() {
 	}
 }
 
-//equateTwinValue is responsible for equating the actual state of the device to the expected state that has been set
+// equateTwinValue is responsible for equating the actual state of the device to the expected state that has been set
 func equateTwinValue(updateMessage DeviceTwinUpdate) {
 	glog.Info("Watching on the device twin values for device: ", configFile.DeviceName)
 	wg.Add(1)
