@@ -1,0 +1,2 @@
+mqtt-url: tcp://10.177.29.149:1883
+device-name: buzzer-instance-01
