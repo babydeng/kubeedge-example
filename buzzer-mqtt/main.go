@@ -29,13 +29,19 @@ var deviceTwinResult DeviceTwinUpdate
 var deviceID string
 var topic float64
 
+// usage is responsible for setting up the default settings of all defined command-line flags for glog.
+func usage() {
+	flag.PrintDefaults()
+	os.Exit(2)
+}
+
 // init for getting command line arguments for glog and initiating the MQTT connection
 func init() {
 	flag.Usage = usage
 	// NOTE: This next line is key you have to call flag.Parse() for the command line
 	// options or "flags" that are defined in the glog module to be picked up.
 	flag.Parse()
-	err := configFile.ReadFromConfigFile()
+	// err := configFile.ReadFromConfigFile()
 	if err != nil {
 		glog.Error(errors.New("Error while reading from config file " + err.Error()))
 		os.Exit(1)
