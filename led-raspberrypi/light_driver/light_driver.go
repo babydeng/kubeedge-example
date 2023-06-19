@@ -1,10 +1,9 @@
 package lightdriver
 
 import (
-	"os"
-
+	"github.com/stianeikeland/go-rpio/v4"
 	"github.com/golang/glog"
-	"github.com/stianeikeland/go-rpio"
+	"os"
 )
 
 func TurnON(pinNumber int64) {

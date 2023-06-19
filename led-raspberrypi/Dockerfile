@@ -6,4 +6,4 @@ COPY . light_mapper/
 
 WORKDIR light_mapper
 
-ENTRYPOINT ["/light_mapper/light_mapper","-logtostderr=true"]
+ENTRYPOINT ["/light_mapper/main","-logtostderr=true"]

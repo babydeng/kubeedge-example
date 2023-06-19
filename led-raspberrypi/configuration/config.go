@@ -7,13 +7,13 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-//CONFIG_MAP_PATH contains the location of the configuration file loaded from config map
+// CONFIG_MAP_PATH contains the location of the configurations file loaded from config map
 var CONFIG_MAP_PATH = "/opt/kubeedge/deviceProfile.json"
 
-//CONFIG_FILE_PATH contains the location of the configuration file
-var CONFIG_FILE_PATH = "configuration/config.yaml"
+// CONFIG_FILE_PATH contains the location of the configurations file
+var CONFIG_FILE_PATH = "configurations/config.yaml"
 
-//ReadConfigFile is the structure that is used to read the config file to get configuration information from the user
+// ReadConfigFile is the structure that is used to read the config file to get configurations information from the user
 type ReadConfigFile struct {
 	DeviceName string `yaml:"device-name,omitempty"`
 	MQTTURL    string `yaml:"mqtt-url,omitempty"`
@@ -52,7 +52,7 @@ type Property struct {
 	Unit         string      `json:"unit,omitempty"`
 }
 
-//ReadFromConfigMap is used to load the information from the configmaps that are provided from the cloud
+// ReadFromConfigMap is used to load the information from the configmaps that are provided from the cloud
 func (deviceProfile *DeviceProfile) ReadFromConfigMap() error {
 	jsonFile, err := ioutil.ReadFile(CONFIG_MAP_PATH)
 	if err != nil {
@@ -65,7 +65,7 @@ func (deviceProfile *DeviceProfile) ReadFromConfigMap() error {
 	return nil
 }
 
-//ReadFromConfigFile is used to load the information from the configuration file
+// ReadFromConfigFile is used to load the information from the configurations file
 func (readConfigFile *ReadConfigFile) ReadFromConfigFile() error {
 	yamlFile, err := ioutil.ReadFile(CONFIG_FILE_PATH)
 	if err != nil {

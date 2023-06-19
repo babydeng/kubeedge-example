@@ -22,13 +22,15 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: config-volume
-          mountPath: /opt/kubeedge/
+          - name: config-volume
+            mountPath: /opt/kubeedge/
       volumes:
       - name: config-volume
         configMap:
           name: device-profile-config-edge-pi
       restartPolicy: Always
+
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
